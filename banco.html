@@ -1,21 +1,23 @@
 <html>
- <head>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <style>
-   #loader {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: rgb(255, 255, 255);
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Santander</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        #loader {
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            background-color: white;
+            position: fixed;
+            width: 100%;
+            z-index: 10000;
         }
-    #notification-panel, #menu-panel {
+
+        #notification-panel, #menu-panel {
             display: none;
             position: fixed;
             top: 0;
@@ -24,189 +26,163 @@
             box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
             z-index: 10000;
             padding: 20px;
-            transition: transform 0.3s ease;
-        }
-    #notification-panel {
-            right: -300px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
             width: 300px;
+            overflow-y: auto;
+            opacity: 0;
         }
-    #notification-panel.open {
-            transform: translateX(-300px);
+
+        @media (max-width: 768px) {
+            #notification-panel, #menu-panel {
+                width: 100%;
+            }
         }
-    #menu-panel {
-            left: -300px;
-            width: 300px;
+
+        #notification-panel.open, #menu-panel.open {
+            opacity: 1;
         }
-    #menu-panel.open {
-            transform: translateX(300px);
-        }
-    .hover-grow {
-            transition: transform 0.2s ease;
-        }
-    .hover-grow:hover {
-            transform: scale(1.05);
-        }
-  </style>
-  <script>
-   document.addEventListener("DOMContentLoaded", function() {
+
+        #notification-panel.open { transform: translateX(0); }
+        #menu-panel.open { transform: translateX(0); }
+
+        .hover-grow { transition: transform 0.2s ease; }
+        .hover-grow:hover { transform: scale(1.05); }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             setTimeout(function() {
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("content").style.display = "block";
-            }, 2000); // 2 seconds delay
+            }, 2000);
 
-            document.getElementById("notification-icon").addEventListener("click", function() {
-                var panel = document.getElementById("notification-panel");
-                if (panel.classList.contains("open")) {
-                    panel.classList.remove("open");
-                } else {
-                    panel.style.display = "block";
-                    setTimeout(function() {
-                        panel.classList.add("open");
-                    }, 10); // slight delay to trigger transition
-                }
-            });
+            function togglePanel(panelId) {
+                const panel = document.getElementById(panelId);
+                panel.classList.toggle("open");
+                panel.style.display = panel.classList.contains("open") ? "block" : "none";
+            }
 
-            document.getElementById("close-notification-panel").addEventListener("click", function() {
-                var panel = document.getElementById("notification-panel");
+            function closePanel(panelId) {
+                const panel = document.getElementById(panelId);
                 panel.classList.remove("open");
-                setTimeout(function() {
-                    panel.style.display = "none";
-                }, 300); // match the transition duration
-            });
+                setTimeout(() => panel.style.display = "none", 300);
+            }
 
-            document.getElementById("menu-icon").addEventListener("click", function() {
-                var panel = document.getElementById("menu-panel");
-                if (panel.classList.contains("open")) {
-                    panel.classList.remove("open");
-                } else {
-                    panel.style.display = "block";
-                    setTimeout(function() {
-                        panel.classList.add("open");
-                    }, 10); // slight delay to trigger transition
-                }
-            });
-
-            document.getElementById("close-menu-panel").addEventListener("click", function() {
-                var panel = document.getElementById("menu-panel");
-                panel.classList.remove("open");
-                setTimeout(function() {
-                    panel.style.display = "none";
-                }, 300); // match the transition duration
-            });
+            document.getElementById("notification-icon").addEventListener("click", () => togglePanel("notification-panel"));
+            document.getElementById("close-notification-panel").addEventListener("click", () => closePanel("notification-panel"));
+            document.getElementById("menu-icon").addEventListener("click", () => togglePanel("menu-panel"));
+            document.getElementById("close-menu-panel").addEventListener("click", () => closePanel("menu-panel"));
         });
-  </script>
- </head>
- <body class="bg-gray-100">
-  <div id="loader">
-   <div class="flex flex-col items-center">
-    <img alt="Loading icon" class="animate-spin h-10 w-10 mb-4" height="40" src="images/carregamento.png" width="40"/>
-    <p class="text-lg font-bold">
-     Carregando...
-    </p>
-   </div>
-  </div>
-  <div id="content" style="display: none;">
-   <div class="bg-red-600 text-white p-4">
-    <div class="flex justify-between items-center">
-     <i id="menu-icon" class="fas fa-bars text-xl cursor-pointer"></i>
-     <div class="flex items-center">
-      <img alt="Santander logo" class="mr-2" height="40" src="images/Santerlogo.png" width="40"/>
-      <span class="text-xl font-bold">Santander</span>
-     </div>
-     <i id="notification-icon" class="fas fa-bell text-xl cursor-pointer"></i>
+    </script>
+</head>
+<body class="bg-gray-100">
+    <div id="loader">
+        <div class="flex flex-col items-center animate-pulse">
+            <img alt="Loading icon" class="animate-spin h-10 w-10 mb-4" height="40" src="images/carregamento.png" width="40"/>
+            <p class="text-lg font-bold">Carregando...</p>
+        </div>
     </div>
-    <div class="mt-4">
-     <p class="text-lg">Olá, Claudia</p>
-     <p class="text-sm">
-      Ag <span class="font-bold">3533</span> Cc <span class="font-bold">01092825-9</span>
-     </p>
+    <div id="content" style="display: none;">
+        <div class="bg-red-600 text-white p-4">
+            <div class="flex justify-between items-center">
+                <i class="fas fa-bars text-xl cursor-pointer" id="menu-icon"></i>
+                <div class="flex items-center">
+                    <img alt="Santander logo" class="mr-2 h-10 w-10" height="40" src="images/Santerlogo.png" width="40"/>
+                    <span class="text-xl font-bold">Santander</span>
+                </div>
+                <i class="fas fa-bell text-xl cursor-pointer" id="notification-icon"></i>
+            </div>
+            <div class="mt-4">
+                <p class="text-lg">Olá, Claudia</p>
+                <p class="text-sm">Ag <span class="font-bold">3533</span> Cc <span class="font-bold">01092825-9</span></p>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="bg-white p-4 rounded-lg shadow-md flex items-center">
+                <div class="bg-red-100 p-2 rounded-full mr-4">
+                    <i class="fas fa-sync-alt text-red-600 text-2xl"></i>
+                </div>
+                <p class="text-sm">O CDB está rendendo +! Agora com 100% do CDI e você saca quando quiser!</p>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-dollar-sign text-gray-500"></i>
+                        <span class="ml-2 text-gray-600">Saldo disponível</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-500"></i>
+                </div>
+                <div class="mb-4">
+                    <p class="text-2xl font-semibold text-gray-800">R$ 1.245,34</p>
+                    <p class="text-gray-600">Saldo + Limite: R$ 1.245,34</p>
+                </div>
+                <div class="border-t border-gray-300 pt-2">
+                    <a class="text-center text-red-500 block" href="extrato.html">Ver extrato</a>
+                </div>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+                <a class="block hover-grow" href="erro.html">
+                    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center">
+                        <img alt="Icon representing Pix" class="mb-4 h-12 w-12" height="48" src="images/Pix.png" width="48"/>
+                        <p class="text-gray-700">Pix</p>
+                    </div>
+                </a>
+                <a class="block hover-grow" href="erro.html">
+                    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center">
+                        <img alt="Icon representing Pagar" class="mb-4 h-12 w-12" height="48" src="images/Pagar.png" width="48"/>
+                        <p class="text-gray-700">Pagar</p>
+                    </div>
+                </a>
+                <a class="block hover-grow" href="erro.html">
+                    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center">
+                        <img alt="Icon representing Transferir" class="mb-4 h-12 w-12" height="48" src="images/Transferir.png" width="48"/>
+                        <p class="text-gray-700">Transferir</p>
+                    </div>
+                </a>
+                <a class="block hover-grow" href="erro.html">
+                    <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center">
+                        <img alt="Icon representing Depositar" class="mb-4 h-12 w-12" height="48" src="images/Emprestimo.png" width="48"/>
+                        <p class="text-gray-700">Depositar</p>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
-   </div>
-   <div class="p-4">
-    <div class="bg-white p-4 rounded-lg shadow-md flex items-center">
-     <div class="bg-red-100 p-2 rounded-full mr-4">
-      <i class="fas fa-sync-alt text-red-600 text-2xl"></i>
-     </div>
-     <p class="text-sm">
-      O CDB está rendendo +! Agora com 100% do CDI e você saca quando quiser!
-      <span class="text-red-600 font-bold"></span>
-     </p>
+    <div class="fixed right-0 top-0 h-full bg-white shadow-lg z-50 p-4" id="notification-panel">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Notificações</h2>
+            <i class="fas fa-times cursor-pointer" id="close-notification-panel"></i>
+        </div>
+        <div class="space-y-4">
+            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                <p class="text-sm">Você recebeu um novo depósito de R$ 500,00.</p>
+                <span class="text-xs text-gray-500">2 horas atrás</span>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                <p class="text-sm">Seu pagamento de R$ 200,00 foi confirmado.</p>
+                <span class="text-xs text-gray-500">1 dia atrás</span>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                <p class="text-sm">Lembrete: Fatura do cartão vence em 3 dias.</p>
+                <span class="text-xs text-gray-500">2 dias atrás</span>
+            </div>
+        </div>
     </div>
-   </div>
-   <div class="p-4">
-    <div class="bg-white shadow-md rounded-lg p-4 w-full">
-     <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center">
-       <i class="fas fa-dollar-sign text-gray-500"></i>
-       <span class="ml-2 text-gray-600">Saldo disponível</span>
-      </div>
-      <i class="fas fa-chevron-right text-gray-500"></i>
-     </div>
-     <div class="mb-4">
-      <p class="text-2xl font-semibold text-gray-800">R$ 1.168,58</p>
-      <p class="text-gray-600">Saldo + Limite: R$ 1.168,58</p>
-     </div>
-     <div class="border-t border-gray-300 pt-2">
-      <a class="text-center text-red-500 block" href="extrato.html">Ver extrato</a>
-     </div>
+    <div class="fixed left-0 top-0 h-full bg-white shadow-lg z-50 p-4" id="menu-panel">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Menu</h2>
+            <i class="fas fa-times cursor-pointer" id="close-menu-panel"></i>
+        </div>
+        <ul class="space-y-4">
+            <li><a class="text-gray-700" href="banco.html">Home</a></li>
+            <li><a class="text-gray-700" href="erro.html">Perfil</a></li>
+            <li><a class="text-gray-700" href="erro.html">Configurações</a></li>
+            <li><a class="text-gray-700" href="erro.html">Ajuda</a></li>
+            <li><a class="text-gray-700" href="erro.html">Sair</a></li>
+        </ul>
     </div>
-   </div>
-   <div class="p-4">
-    <div class="flex space-x-4">
-     <!-- Card 1 -->
-     <a class="block hover-grow" href="erro.html">
-      <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center w-32 h-32">
-       <img alt="Icon representing Pix" class="mb-4" height="50" src="images/Pix.png" width="50"/>
-       <p class="text-gray-700">Pix</p>
-      </div>
-     </a>
-     <!-- Card 2 -->
-     <a class="block hover-grow" href="erro.html">
-      <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center w-32 h-32">
-       <img alt="Icon representing Pagar" class="mb-4" height="50" src="images/Pagar.png" width="50"/>
-       <p class="text-gray-700">Pagar</p>
-      </div>
-     </a>
-     <!-- Card 3 -->
-     <a class="block hover-grow" href="erro.html">
-      <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center w-32 h-32">
-       <img alt="Icon representing Transferir" class="mb-4" height="50" src="images/Transferir.png" width="50"/>
-       <p class="text-gray-700">Transferir</p>
-      </div>
-     </a>
-     <!-- Card 4 -->
-     <a class="block hover-grow" href="erro.html">
-      <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center w-32 h-32">
-       <img alt="Icon representing Emprestimo" class="mb-4" height="40" src="images/Emprestimo.png" width="40"/>
-       <p class="text-gray-700">Emprestimo</p>
-      </div>
-     </a>
-    </div>
-   </div>
-  </div>
-  <div id="notification-panel">
-   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold">Notificações</h2>
-    <i id="close-notification-panel" class="fas fa-times cursor-pointer"></i>
-   </div>
-   <p class="text-gray-600">Não há notificações</p>
-  </div>
-  <div id="menu-panel">
-   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold">Menu</h2>
-    <i id="close-menu-panel" class="fas fa-times cursor-pointer"></i>
-   </div>
-   <ul class="space-y-2">
-    <li><a href="#" class="text-gray-700">Agendamento</a></li>
-    <li><a href="#" class="text-gray-700">Cartões</a></li>
-    <li><a href="#" class="text-gray-700">Comprovantes</a></li>
-    <li><a href="#" class="text-gray-700">Boletos</a></li>
-    <li><a href="#" class="text-gray-700">Pagamentos</a></li>
-    <li><a href="#" class="text-gray-700">Pix</a></li>
-    <li><a href="#" class="text-gray-700">Recargas</a></li>
-    <li><a href="#" class="text-gray-700">Saque</a></li>
-    <li><a href="#" class="text-gray-700">Transferências</a></li>
-   </ul>
-  </div>
- </body>
+</body>
 </html>
